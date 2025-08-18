@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #ffd700;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        main {
+            margin-top: 80px;
+        }
+
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-content {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.2s forwards;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.4s forwards;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #333;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.6s forwards;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
+        }
+
+        .section {
+            padding: 4rem 0;
+        }
+
+        .projects {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .project-card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .project-card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .project-link:hover {
+            color: #764ba2;
+        }
+
+        .skills {
+            color: white;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .skill-item {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .skill-item:hover {
+            transform: scale(1.05);
+        }
+
+        .skill-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact {
+            background: rgba(255, 255, 255, 0.95);
+            text-align: center;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #333;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item:hover {
+            color: #667eea;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        .scale-in {
+            opacity: 1 !important;
+            transform: scale(1) !important;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="#" class="logo">Portfolio</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Hello, I'm a Developer</h1>
+                    <p>Creating amazing web experiences with passion and creativity</p>
+                    <a href="#projects" class="cta-button">View My Work</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="section projects">
+            <div class="container">
+                <h2 class="section-title">My Projects</h2>
+                <div class="project-grid">
+                    <div class="project-card">
+                        <h3>🌟 Project Alpha</h3>
+                        <p>A modern web application built with cutting-edge technologies. Features responsive design and smooth animations.</p>
+                        <a href="#" class="project-link">View Project →</a>
+                    </div>
+                    <div class="project-card">
+                        <h3>🚀 Project Beta</h3>
+                        <p>An innovative mobile-first solution that revolutionizes user experience with intuitive design patterns.</p>
+                        <a href="#" class="project-link">View Project →</a>
+                    </div>
+                    <div class="project-card">
+                        <h3>💎 Project Gamma</h3>
+                        <p>A full-stack application showcasing advanced JavaScript techniques and modern development practices.</p>
+                        <a href="#" class="project-link">View Project →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="section skills">
+            <div class="container">
+                <h2 class="section-title">My Skills</h2>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <div class="skill-icon">💻</div>
+                        <h3>Frontend</h3>
+                        <p>HTML, CSS, JavaScript, React</p>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon">⚙️</div>
+                        <h3>Backend</h3>
+                        <p>Node.js, Python, Databases</p>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon">🎨</div>
+                        <h3>Design</h3>
+                        <p>UI/UX, Figma, Adobe Creative</p>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon">🔧</div>
+                        <h3>Tools</h3>
+                        <p>Git, Docker, VS Code</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="section contact">
+            <div class="container">
+                <h2 class="section-title">Get In Touch</h2>
+                <p>Let's work together to create something amazing!</p>
+                <div class="contact-info">
+                    <a href="mailto:mayker.reyes@gmail.com" class="contact-item">
+                        <span>📧</span>
+                        <span>mayker.reyes@gmail.com</span>
+                    </a>
+                    <a href="https://github.com/maykerreyes" class="contact-item">
+                        <span>🐙</span>
+                        <span>GitHub</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/mayker-reyes-b43a6218/" class="contact-item">
+                        <span>💼</span>
+                        <span>LinkedIn</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 My Portfolio. Made with ❤️</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (entry.target.classList.contains('project-card')) {
+                        entry.target.classList.add('fade-in');
+                    } else if (entry.target.classList.contains('skill-item')) {
+                        entry.target.classList.add('scale-in');
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe project cards and skill items
+        document.querySelectorAll('.project-card, .skill-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Dynamic typing effect for the hero title
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.textContent = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Add some interactivity to the hero section
+        const heroTitle = document.querySelector('.hero h1');
+        const originalText = heroTitle.textContent;
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.transform = `translateY(${rate}px)`;
+            }
+        });
+
+        // Add click counter for fun
+        let clickCount = 0;
+        const ctaButton = document.querySelector('.cta-button');
+        const originalButtonText = ctaButton.textContent;
+
+        ctaButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            clickCount++;
+            ctaButton.textContent = `Clicked ${clickCount} times! 🎉`;
+            
+            setTimeout(() => {
+                ctaButton.textContent = originalButtonText;
+            }, 2000);
+        });
+
+        // Add some sparkle effects when hovering over project cards
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.background = 'linear-gradient(45deg, #fff, #f8f9ff)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.background = 'white';
+            });
+        });
+
+        // Console welcome message
+        console.log('🎉 Welcome to my portfolio! Thanks for checking out the code!');
+        console.log('💻 Built with vanilla HTML, CSS, and JavaScript');
+        console.log('🚀 Ready to push to GitHub!');
+    </script>
+</body>
+</html>
