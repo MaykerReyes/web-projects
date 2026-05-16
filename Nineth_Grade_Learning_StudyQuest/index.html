@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StudyQuest</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">SQ</span>
+        <div>
+            <p class="grade-label">Ninth Grade Learning</p>
+
+      <div class="stats" aria-label="Learning stats">
+        <div class="stat">
+          <span class="stat-label">XP</span>
+          <strong id="xp-counter">0</strong>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Streak</span>
+          <strong id="streak-counter">0</strong>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Level</span>
+          <strong id="level-counter">1</strong>
+        </div>
+      </div>
+    </header>
+
+    <nav class="app-nav" aria-label="Main sections">
+      <button class="nav-btn" type="button" data-view="quest" aria-pressed="true">Quest</button>
+      <button class="nav-btn" type="button" data-view="guide" aria-pressed="false">Guide</button>
+      <button class="nav-btn" type="button" data-view="games" aria-pressed="false">Games</button>
+    </nav>
+
+    <section class="progress-strip" id="progress-strip" aria-label="Quest progress">
+      <div class="progress-copy">
+        <span id="progress-label">Challenge 1</span>
+        <span id="mastery-label">0 mastered</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+    </section>
+
+    <main class="quest-layout view" id="quest-view">
+      <aside class="side-panel" aria-label="Subjects and topic paths">
+        <div class="side-heading">
+          <h2>Quest</h2>
+          <div class="side-actions">
+            <button class="text-btn" type="button" id="new-set-btn">New set</button>
+            <button class="text-btn" type="button" id="reset-btn">Reset</button>
+          </div>
+        </div>
+
+        <section class="filter-group" aria-label="Subjects">
+          <h3>Subjects</h3>
+          <div class="subject-list" id="subject-list"></div>
+        </section>
+
+        <section class="filter-group" aria-label="Paths">
+          <h3>Paths</h3>
+          <div class="topic-list" id="topic-list"></div>
+        </section>
+      </aside>
+
+      <section class="question-panel" id="question-card" aria-live="polite">
+        <div class="question-meta">
+          <span class="topic-label" id="topic-label">Topic</span>
+          <span class="step-label" id="step-label">Step 1</span>
+        </div>
+
+        <h2 class="question-text" id="question-text">Loading question...</h2>
+
+        <div class="options-grid" id="options-grid"></div>
+
+        <div class="feedback-box hidden" id="feedback-box" role="status" aria-live="polite">
+          <h3 id="feedback-title">Correct</h3>
+          <p id="feedback-text"></p>
+          <button class="primary-btn" id="next-btn" type="button">Next challenge</button>
+        </div>
+      </section>
+    </main>
+
+    <main class="view hidden" id="guide-view">
+      <section class="guide-hero">
+        <div>
+          <p class="eyebrow">Your StudyQuest map</p>
+          <h2>What this app is about</h2>
+          <p>
+            StudyQuest is a practice space for ninth-grade learning. You can work on Algebra,
+            reading analysis, science concepts, and social studies skills, then read a short
+            explanation after each answer so the idea becomes clearer.
+          </p>
+        </div>
+      </section>
+
+      <section class="guide-grid" aria-label="How StudyQuest works">
+        <article class="guide-card">
+          <span class="guide-number">1</span>
+          <h3>Pick a subject</h3>
+          <p>
+            Choose All Subjects for a mixed quest, or choose one subject when you want to focus
+            on reading, grammar, science ideas, history, geography, or math.
+          </p>
+        </article>
+
+        <article class="guide-card">
+          <span class="guide-number">2</span>
+          <h3>Analyze before you answer</h3>
+          <p>
+            Read the question carefully, identify the key idea, and choose the answer that matches
+            your reasoning. Thinking first helps you learn more from the challenge.
+          </p>
+        </article>
+
+        <article class="guide-card">
+          <span class="guide-number">3</span>
+          <h3>Use the explanation</h3>
+          <p>
+            After every answer, StudyQuest shows why the answer works. If you miss one, the explanation
+            is the most important part of the challenge.
+          </p>
+        </article>
+
+        <article class="guide-card">
+          <span class="guide-number">4</span>
+          <h3>Track your progress</h3>
+          <p>
+            Correct answers give XP. A streak means correct answers in a row. Progress matters,
+            and missing a question is still part of learning.
+          </p>
+        </article>
+      </section>
+
+      <section class="guide-panel">
+        <div class="guide-column">
+          <h3>What the buttons mean</h3>
+          <ul class="plain-list">
+            <li><strong>New set:</strong> reshuffles a fresh group of questions but keeps XP.</li>
+            <li><strong>Reset:</strong> starts over from zero on this browser.</li>
+            <li><strong>Games:</strong> opens short focus challenges for quick review.</li>
+            <li><strong>Subjects:</strong> lets you switch between Math, Language Arts, Science, and Social Studies.</li>
+          </ul>
+        </div>
+
+        <div class="guide-column">
+          <h3>A good way to practice</h3>
+          <ol class="plain-list">
+            <li>Start with one subject for 10 minutes.</li>
+            <li>Write down any question that feels confusing.</li>
+            <li>Play one game after the quest as a quick review.</li>
+          </ol>
+        </div>
+      </section>
+    </main>
+
+    <main class="view hidden" id="games-view">
+      <section class="games-grid" aria-label="StudyQuest games">
+        <article class="game-panel" aria-labelledby="star-title">
+          <div class="game-head">
+            <div>
+              <p class="eyebrow">Arcade run</p>
+              <h2 id="star-title">Star Catcher</h2>
+            </div>
+            <div class="score-pill">Score <strong id="star-score">0</strong></div>
+            <div class="score-pill">Level <strong id="star-level">1</strong></div>
+          </div>
+
+          <p class="game-copy">
+            Slide the catcher to collect falling stars before time runs out. Move with arrow keys,
+            touch, or your mouse for a short focus challenge.
+          </p>
+
+          <div class="arcade-stage">
+            <canvas id="star-canvas" width="680" height="430" aria-label="Star Catcher game area"></canvas>
+            <div class="game-hud">
+              <span>Time <strong id="star-time">30</strong></span>
+              <span>Best <strong id="star-best">0</strong></span>
+            </div>
+            <p class="game-feedback" id="star-feedback" aria-live="polite">Press Start to play.</p>
+            <button class="primary-btn" type="button" id="star-start-btn">Start game</button>
+          </div>
+        </article>
+
+        <article class="game-panel" aria-labelledby="lights-title">
+          <div class="game-head">
+            <div>
+              <p class="eyebrow">Memory challenge</p>
+              <h2 id="lights-title">Memory Lights</h2>
+            </div>
+            <div class="score-pill">Round <strong id="lights-round">0</strong></div>
+          </div>
+
+          <p class="game-copy">
+            Watch the light pattern, then repeat it. Each round grows harder and the pace gets a bit faster.
+          </p>
+
+          <div class="lights-stage">
+            <div class="lights-board" id="lights-board" aria-label="Memory Lights buttons">
+              <button class="light-pad light-pad-a" type="button" data-pad="0" aria-label="Top left light"></button>
+              <button class="light-pad light-pad-b" type="button" data-pad="1" aria-label="Top right light"></button>
+              <button class="light-pad light-pad-c" type="button" data-pad="2" aria-label="Bottom left light"></button>
+              <button class="light-pad light-pad-d" type="button" data-pad="3" aria-label="Bottom right light"></button>
+            </div>
+            <p class="game-feedback" id="lights-feedback" aria-live="polite">Press Start to see the first pattern.</p>
+            <button class="primary-btn" type="button" id="lights-start-btn">Start pattern</button>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
