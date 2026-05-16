@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Memory Lights</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="games.css">
+  <style>
+    .lights-grid {
+      display: grid;
+      gap: 18px;
+      max-width: 840px;
+      margin: 0 auto;
+    }
+    .lights-board {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(100px, 1fr));
+      gap: 14px;
+    }
+    .light-pad {
+      width: 100%;
+      min-height: 120px;
+      border-radius: 18px;
+      border: none;
+      cursor: pointer;
+      transition: transform 120ms ease, filter 120ms ease;
+    }
+    .light-pad-a { background: #fbbf24; }
+    .light-pad-b { background: #ec4899; }
+    .light-pad-c { background: #22c55e; }
+    .light-pad-d { background: #3b82f6; }
+    .light-pad.active {
+      filter: brightness(1.35);
+      transform: scale(1.03);
+    }
+    .game-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">SQ</span>
+        <div>
+          <p class="grade-label">Ninth Grade Learning</p>
+          <h1>Memory Lights</h1>
+        </div>
+      </div>
+      <div class="game-topbar-actions">
+        <a class="game-nav-link" href="library.html">Game library</a>
+        <a class="game-nav-link game-nav-link--accent" href="../index.html">StudyQuest Home</a>
+      </div>
+    </header>
+
+    <main class="game-page-stack">
+      <section class="guide-hero">
+        <div>
+          <p class="eyebrow">Memory challenge</p>
+          <h2>Repeat the light pattern</h2>
+          <p>Watch the sequence carefully, then tap the lights in the same order. Each round adds one more step.</p>
+        </div>
+      </section>
+
+      <section class="game-how-to" aria-label="How to play Memory Lights">
+        <h3>How to play</h3>
+        <ol>
+          <li>Click <strong>Start Game</strong> and watch the colored pads flash in order.</li>
+          <li>When it is your turn, tap the same pads in the same order.</li>
+          <li>Each successful round adds one more step to remember.</li>
+        </ol>
+        <p class="game-how-to-tip">
+          <strong>Learning tip:</strong> Say the color names quietly (yellow, pink, green, blue) to lock the pattern in your memory.
+        </p>
+      </section>
+
+      <section>
+        <div class="lights-board" id="light-area">
+          <button class="light-pad light-pad-a" data-pad="0" aria-label="Yellow light"></button>
+          <button class="light-pad light-pad-b" data-pad="1" aria-label="Pink light"></button>
+          <button class="light-pad light-pad-c" data-pad="2" aria-label="Green light"></button>
+          <button class="light-pad light-pad-d" data-pad="3" aria-label="Blue light"></button>
+        </div>
+        <p class="game-feedback" id="lights-message">Press Start to begin.</p>
+        <div class="game-actions">
+          <button class="primary-btn" id="lights-start">Start Game</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const pads = Array.from(document.querySelectorAll('.light-pad'));
+    const startButton = document.getElementById('lights-start');
+    const message = document.getElementById('lights-message');
+
+    const state = {
+      sequence: [],
+      inputIndex: 0,
+      round: 0,
+      accepting: false,
+      token: 0
+    };
+
+    function setMessage(text) {
+      message.textContent = text;
+    }
+
+    function flashPad(index, duration = 400) {
+      const pad = pads[index];
+      if (!pad) return;
+      pad.classList.add('active');
+      setTimeout(() => pad.classList.remove('active'), duration);
+    }
+
+    function playSequence(token) {
+      state.accepting = false;
+      setMessage('Watch the lights.');
+      state.sequence.forEach((padIndex, position) => {
+        setTimeout(() => {
+          if (token !== state.token) return;
+          flashPad(padIndex);
+        }, 600 * position);
+      });
+
+      setTimeout(() => {
+        if (token !== state.token) return;
+        state.inputIndex = 0;
+        state.accepting = true;
+        setMessage('Now repeat the pattern.');
+      }, 600 * state.sequence.length + 150);
+    }
+
+    function nextRound() {
+      state.sequence.push(Math.floor(Math.random() * pads.length));
+      state.round += 1;
+      state.token += 1;
+      playSequence(state.token);
+    }
+
+    function startGame() {
+      state.sequence = [];
+      state.inputIndex = 0;
+      state.round = 0;
+      state.token += 1;
+      setMessage('Get ready!');
+      nextRound();
+      startButton.textContent = 'Restart Game';
+    }
+
+    function handlePad(index) {
+      if (!state.accepting) return;
+      flashPad(index, 180);
+      if (index !== state.sequence[state.inputIndex]) {
+        state.accepting = false;
+        setMessage(`Oops! You reached round ${state.round}. Try again.`);
+        return;
+      }
+      state.inputIndex += 1;
+      if (state.inputIndex === state.sequence.length) {
+        setMessage('Great job! Preparing the next round...');
+        state.accepting = false;
+        setTimeout(nextRound, 600);
+      }
+    }
+
+    pads.forEach((pad, index) => {
+      pad.addEventListener('click', () => handlePad(index));
+    });
+    startButton.addEventListener('click', startGame);
+  </script>
+</body>
+</html>
+

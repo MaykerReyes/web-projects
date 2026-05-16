@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Math Blaster</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="games.css">
+  <style>
+    .blast-page {
+      max-width: 840px;
+      margin: 0 auto;
+      display: grid;
+      gap: 18px;
+    }
+    .blast-board {
+      border: 1px solid #dfe8e5;
+      border-radius: 18px;
+      padding: 24px;
+      background: #ffffff;
+      box-shadow: 0 12px 30px rgba(28, 42, 38, 0.08);
+    }
+    .blast-equation {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+    .blast-options {
+      display: grid;
+      gap: 12px;
+    }
+    .blast-options button {
+      width: 100%;
+    }
+    .blast-status {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">SQ</span>
+        <div>
+          <p class="grade-label">Fifth Grade Learning</p>
+          <h1>Math Blaster</h1>
+        </div>
+      </div>
+      <div class="game-topbar-actions">
+        <a class="game-nav-link" href="library.html">← Game Library</a>
+        <a class="game-nav-link game-nav-link--accent" href="../index.html">StudyQuest Home</a>
+      </div>
+    </header>
+
+    <main class="game-page-stack">
+      <section class="guide-hero">
+        <div>
+          <p class="eyebrow">Mental math</p>
+          <h2>Solve problems quickly</h2>
+          <p>Answer each question before the timer ends to earn points and build speed.</p>
+        </div>
+      </section>
+
+      <section class="game-how-to" aria-label="How to play Math Blaster">
+        <h3>How to play</h3>
+        <ol>
+          <li>Click <strong>Start Game</strong> to begin a timed round.</li>
+          <li>Read the equation and choose the correct answer from the buttons.</li>
+          <li>Correct answers increase your score and correct-count before time runs out.</li>
+        </ol>
+        <p class="game-how-to-tip">
+          <strong>Learning tip:</strong> Break harder problems into smaller parts (for example, 14 + 8 = 14 + 6 + 2).
+        </p>
+      </section>
+
+      <section class="blast-board">
+        <div class="blast-equation">
+          <span class="eyebrow">Equation</span>
+          <h2 id="equation-text">Press Start</h2>
+        </div>
+
+        <div class="blast-options" id="option-buttons"></div>
+
+        <div class="blast-status">
+          <div class="stat"><span class="stat-label">Score</span><strong id="blast-score">0</strong></div>
+          <div class="stat"><span class="stat-label">Time</span><strong id="blast-time">30</strong></div>
+          <div class="stat"><span class="stat-label">Correct</span><strong id="blast-correct">0</strong></div>
+        </div>
+
+        <p class="game-feedback" id="blast-message">Press Start to begin.</p>
+        <button class="primary-btn" id="blast-start">Start Game</button>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const equationText = document.getElementById('equation-text');
+    const optionButtons = document.getElementById('option-buttons');
+    const scoreEl = document.getElementById('blast-score');
+    const timeEl = document.getElementById('blast-time');
+    const correctEl = document.getElementById('blast-correct');
+    const message = document.getElementById('blast-message');
+    const startBtn = document.getElementById('blast-start');
+
+    const state = {
+      running: false,
+      score: 0,
+      correct: 0,
+      timeLeft: 30,
+      answer: null,
+      timerId: null
+    };
+
+    function randomProblem() {
+      const ops = ['+', '-', '×'];
+      const op = ops[Math.floor(Math.random() * ops.length)];
+      let a = Math.floor(Math.random() * 12) + 1;
+      let b = Math.floor(Math.random() * 12) + 1;
+      let answer;
+      if (op === '+') answer = a + b;
+      if (op === '-') {
+        if (a < b) [a, b] = [b, a];
+        answer = a - b;
+      }
+      if (op === '×') answer = a * b;
+      return { text: `${a} ${op} ${b} = ?`, answer };
+    }
+
+    function renderProblem() {
+      const { text, answer } = randomProblem();
+      state.answer = answer;
+      equationText.textContent = text;
+      optionButtons.innerHTML = '';
+
+      const choices = new Set([answer]);
+      while (choices.size < 4) {
+        const offset = Math.floor(Math.random() * 15) - 7;
+        if (offset === 0) continue;
+        choices.add(answer + offset);
+      }
+
+      Array.from(choices).sort(() => Math.random() - 0.5).forEach(value => {
+        const btn = document.createElement('button');
+        btn.className = 'primary-btn';
+        btn.textContent = value;
+        btn.type = 'button';
+        btn.addEventListener('click', () => selectAnswer(value));
+        optionButtons.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(value) {
+      if (!state.running) return;
+      if (value === state.answer) {
+        state.score += 15;
+        state.correct += 1;
+        message.textContent = 'Great! Keep going.';
+      } else {
+        message.textContent = 'Oops! Try the next one.';
+      }
+      scoreEl.textContent = state.score;
+      correctEl.textContent = state.correct;
+      renderProblem();
+    }
+
+    function endGame() {
+      state.running = false;
+      clearInterval(state.timerId);
+      message.textContent = `Time’s up! You scored ${state.score}.`;
+      equationText.textContent = 'Game Over';
+      optionButtons.innerHTML = '';
+      startBtn.textContent = 'Play Again';
+    }
+
+    function startGame() {
+      state.running = true;
+      state.score = 0;
+      state.correct = 0;
+      state.timeLeft = 30;
+      scoreEl.textContent = '0';
+      correctEl.textContent = '0';
+      timeEl.textContent = '30';
+      message.textContent = 'Solve as many as you can!';
+      startBtn.textContent = 'Restart';
+      renderProblem();
+      clearInterval(state.timerId);
+      state.timerId = setInterval(() => {
+        state.timeLeft -= 1;
+        timeEl.textContent = state.timeLeft;
+        if (state.timeLeft <= 0) endGame();
+      }, 1000);
+    }
+
+    startBtn.addEventListener('click', startGame);
+  </script>
+</body>
+</html>

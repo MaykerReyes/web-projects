@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Shooter - Retro Arcade</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-wrapper">
+        <div class="top-bar">
+            <a href="../index.html" class="back-btn">← BACK</a>
+            <div class="hud">
+                <div class="hud-item">
+                    <div class="hud-label">SCORE</div>
+                    <div id="scoreDisplay" class="hud-value">000000</div>
+                </div>
+                <div class="hud-item">
+                    <div class="hud-label">WAVE</div>
+                    <div id="waveDisplay" class="hud-value">1</div>
+                </div>
+                <div class="hud-item">
+                    <div class="hud-label">LIVES</div>
+                    <div id="livesDisplay" class="hud-value">3</div>
+                </div>
+                <div class="hud-item">
+                    <div class="hud-label">POWER</div>
+                    <div id="powerDisplay" class="hud-value">---</div>
+                </div>
+            </div>
+        </div>
+        <canvas id="gameCanvas"></canvas>
+        <div class="controls">
+            <button id="startBtn" class="retro-btn">START</button>
+            <button id="musicBtn" class="retro-btn">MUSIC: ON</button>
+            <button id="saveBtn" class="retro-btn">SAVE</button>
+            <button id="resetBtn" class="retro-btn danger">RESET</button>
+        </div>
+        <div class="instructions">
+            <div class="key-row">
+                <span class="key-badge">←→</span> or <span class="key-badge">A D</span>
+                <span class="key-label">Move</span>
+            </div>
+            <div class="key-row">
+                <span class="key-badge">SPACE</span>
+                <span class="key-label">Shoot</span>
+            </div>
+            <div class="key-row">
+                <span class="key-badge">ENTER</span>
+                <span class="key-label">Start / Pause</span>
+            </div>
+            <div class="key-row">
+                <span class="key-badge">CTRL+S</span>
+                <span class="key-label">Save</span>
+            </div>
+            <div class="key-row">
+                <span class="key-badge">R</span>
+                <span class="key-label">Reset</span>
+            </div>
+            <div class="key-row">
+                <span class="key-badge">M</span>
+                <span class="key-label">Toggle Music</span>
+            </div>
+        </div>
+        <div id="message" class="message hidden"></div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #0a0a0a;
+    color: #fff;
+    font-family: 'Press Start 2P', monospace;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+#starfield {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.title {
+    font-size: 48px;
+    color: #00ffcc;
+    text-shadow: 0 0 20px #00ffcc, 0 0 40px #00ffcc;
+    margin-bottom: 20px;
+    letter-spacing: 8px;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 20px #00ffcc, 0 0 40px #00ffcc; }
+    to { text-shadow: 0 0 30px #00ffcc, 0 0 60px #00ffcc, 0 0 80px #00ffcc; }
+}
+
+.subtitle {
+    font-size: 18px;
+    color: #888;
+    margin-bottom: 60px;
+    letter-spacing: 4px;
+}
+
+.game-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+.game-card {
+    background: rgba(20, 20, 20, 0.9);
+    border: 2px solid #333;
+    border-radius: 12px;
+    padding: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.game-card:hover {
+    transform: translateY(-10px);
+    border-color: #00ffcc;
+    box-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
+}
+
+.game-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #00ffcc, #ff00ff, #00ffcc);
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.game-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.game-title {
+    font-size: 20px;
+    color: #00ffcc;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+}
+
+.game-subtitle {
+    font-size: 9px;
+    color: #ff00ff;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.game-desc {
+    font-size: 10px;
+    color: #888;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    min-height: 40px;
+}
+
+.game-stats {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-label {
+    font-size: 10px;
+    color: #666;
+}
+
+.stat-value {
+    font-size: 16px;
+    color: #ff00ff;
+    text-shadow: 0 0 10px #ff00ff;
+}
+
+.play-btn {
+    width: 100%;
+    padding: 15px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    background: #00ffcc;
+    color: #0a0a0a;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 2px;
+}
+
+.play-btn:hover {
+    background: #00cc99;
+    box-shadow: 0 0 20px #00ffcc;
+    transform: scale(1.05);
+}
+
+.footer {
+    background: rgba(20, 20, 20, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #333;
+}
+
+.footer p {
+    font-size: 8px;
+    color: #666;
+    margin: 8px 0;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 32px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+    }
+
+    .game-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .game-card {
+        padding: 20px;
+    }
+}

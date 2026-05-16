@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Defender - Retro Arcade for Isa and Sarah</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-wrapper">
+        <div class="top-bar">
+            <a href="../index.html" class="back-btn">← BACK TO HUB</a>
+            <div class="hud">
+                <div class="hud-item">
+                    <div class="hud-label">SCORE</div>
+                    <div id="scoreDisplay" class="hud-value">000000</div>
+                </div>
+                <div class="hud-item">
+                    <div class="hud-label">LEVEL</div>
+                    <div id="levelDisplay" class="hud-value">1</div>
+                </div>
+                <div class="hud-item">
+                    <div class="hud-label">LIVES</div>
+                    <div id="livesDisplay" class="hud-value">3</div>
+                </div>
+                <div class="hud-item">
+                    <div class="hud-label">ASTRONAUTS</div>
+                    <div id="astroDisplay" class="hud-value">10</div>
+                </div>
+                <div class="hud-item">
+                    <div class="hud-label">BOMBS</div>
+                    <div id="bombDisplay" class="hud-value">0</div>
+                </div>
+            </div>
+        </div>
+        <canvas id="gameCanvas"></canvas>
+        <div class="controls">
+            <button id="startBtn" class="retro-btn">START</button>
+            <button id="musicBtn" class="retro-btn">MUSIC: ON</button>
+            <button id="saveBtn" class="retro-btn">SAVE</button>
+            <button id="resetBtn" class="retro-btn danger">RESET</button>
+        </div>
+        <div class="instructions">
+            <div class="key-row">
+                <span class="key-badge">←→↑↓</span> or <span class="key-badge">W A S D</span>
+                <span class="key-label">Move</span>
+            </div>
+            <div class="key-row">
+                <span class="key-badge">SPACE</span>
+                <span class="key-label">Shoot</span>
+            </div>
+            <div class="key-row">
+                <span class="key-badge">H</span>
+                <span class="key-label">Hyperspace</span>
+            </div>
+            <div class="key-row">
+                <span class="key-badge">B</span>
+                <span class="key-label">Smart Bomb</span>
+            </div>
+            <div class="key-row">
+                <span class="key-badge">ENTER</span>
+                <span class="key-label">Start / Pause</span>
+            </div>
+            <div class="key-row">
+                <span class="key-badge">CTRL+S</span>
+                <span class="key-label">Save</span>
+            </div>
+            <div class="key-row">
+                <span class="key-badge">R</span>
+                <span class="key-label">Reset</span>
+            </div>
+            <div class="key-row">
+                <span class="key-badge">M</span>
+                <span class="key-label">Toggle Music</span>
+            </div>
+        </div>
+        <div id="message" class="message hidden"></div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>

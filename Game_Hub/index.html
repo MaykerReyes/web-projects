@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Arcade for Isa and Sarah</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="starfield"></canvas>
+    <div class="container">
+        <h1 class="title">RETRO ARCADE</h1>
+        <p class="subtitle">For Isa and Sarah</p>
+        <div class="game-grid">
+            <div class="game-card" onclick="window.location.href='Snake_Neon_Game/index.html'">
+                <div class="game-icon snake-icon">🐍</div>
+                <h2 class="game-title">NEON SNAKE</h2>
+                <p class="game-subtitle">For Isa and Sarah</p>
+                <p class="game-desc">Classic snake game with neon glow effects. Eat, grow, and survive!</p>
+                <div class="game-stats">
+                    <span class="stat-label">HIGH SCORE</span>
+                    <span id="snakeHighScore" class="stat-value">0</span>
+                </div>
+                <button class="play-btn">PLAY NOW</button>
+            </div>
+            <div class="game-card" onclick="window.location.href='Mario_Retro_Game/index.html'">
+                <div class="game-icon mario-icon">🍄</div>
+                <h2 class="game-title">MARIO RETRO</h2>
+                <p class="game-subtitle">For Isa and Sarah</p>
+                <p class="game-desc">5 worlds of classic platforming adventure. Defeat the boss!</p>
+                <div class="game-stats">
+                    <span class="stat-label">HIGH SCORE</span>
+                    <span id="marioHighScore" class="stat-value">0</span>
+                </div>
+                <button class="play-btn">PLAY NOW</button>
+            </div>
+            <div class="game-card" onclick="window.location.href='Space_Shooter_Game/index.html'">
+                <div class="game-icon space-icon">🚀</div>
+                <h2 class="game-title">SPACE SHOOTER</h2>
+                <p class="game-subtitle">For Isa and Sarah</p>
+                <p class="game-desc">Defend Earth from alien invaders in this retro space shooter!</p>
+                <div class="game-stats">
+                    <span class="stat-label">HIGH SCORE</span>
+                    <span id="spaceHighScore" class="stat-value">0</span>
+                </div>
+                <button class="play-btn">PLAY NOW</button>
+            </div>
+            <div class="game-card" onclick="window.location.href='Defender_Game/index.html'">
+                <div class="game-icon defender-icon">🛡️</div>
+                <h2 class="game-title">DEFENDER</h2>
+                <p class="game-subtitle">For Isa and Sarah</p>
+                <p class="game-desc">Protect astronauts from alien abduction in this classic 80s shooter!</p>
+                <div class="game-stats">
+                    <span class="stat-label">HIGH SCORE</span>
+                    <span id="defenderHighScore" class="stat-value">0</span>
+                </div>
+                <button class="play-btn">PLAY NOW</button>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Use Arrow Keys / WASD to move • SPACE to jump/shoot • ENTER to start</p>
+            <p>M = Toggle Music • CTRL+S = Save • R = Reset</p>
+        </div>
+    </div>
+    <script>
+        const starCanvas = document.getElementById('starfield');
+        const starCtx = starCanvas.getContext('2d');
+        starCanvas.width = window.innerWidth;
+        starCanvas.height = window.innerHeight;
+
+        const stars = [];
+        for (let i = 0; i < 200; i++) {
+            stars.push({
+                x: Math.random() * starCanvas.width,
+                y: Math.random() * starCanvas.height,
+                size: Math.random() * 2 + 0.5,
+                speed: Math.random() * 0.5 + 0.1,
+                opacity: Math.random()
+            });
+        }
+
+        function animateStars() {
+            starCtx.fillStyle = '#0a0a0a';
+            starCtx.fillRect(0, 0, starCanvas.width, starCanvas.height);
+
+            stars.forEach(star => {
+                star.opacity += (Math.random() - 0.5) * 0.02;
+                if (star.opacity < 0.2) star.opacity = 0.2;
+                if (star.opacity > 1) star.opacity = 1;
+
+                starCtx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+                starCtx.fillRect(star.x, star.y, star.size, star.size);
+
+                star.y += star.speed;
+                if (star.y > starCanvas.height) {
+                    star.y = 0;
+                    star.x = Math.random() * starCanvas.width;
+                }
+            });
+
+            requestAnimationFrame(animateStars);
+        }
+        animateStars();
+
+        window.addEventListener('resize', () => {
+            starCanvas.width = window.innerWidth;
+            starCanvas.height = window.innerHeight;
+        });
+
+        function loadHighScores() {
+            const snakeScore = localStorage.getItem('neonSnakeHighScore') || 0;
+            const marioScore = localStorage.getItem('marioHighScore') || 0;
+            const spaceScore = localStorage.getItem('spaceShooterHighScore') || 0;
+            const defenderScore = localStorage.getItem('defenderHighScore') || 0;
+
+            document.getElementById('snakeHighScore').textContent = snakeScore;
+            document.getElementById('marioHighScore').textContent = marioScore;
+            document.getElementById('spaceHighScore').textContent = spaceScore;
+            document.getElementById('defenderHighScore').textContent = defenderScore;
+        }
+
+        loadHighScores();
+    </script>
+</body>
+</html>

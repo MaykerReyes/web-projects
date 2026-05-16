@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>StudyQuest</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="games/games.css">
 </head>
 <body>
   <div class="app-shell">
@@ -34,9 +35,10 @@
     </header>
 
     <nav class="app-nav" aria-label="Main sections">
-      <button class="nav-btn" type="button" data-view="quest" aria-pressed="true">Quest</button>
       <button class="nav-btn" type="button" data-view="guide" aria-pressed="false">Guide</button>
+      <button class="nav-btn" type="button" data-view="quest" aria-pressed="true">Quest</button>
       <button class="nav-btn" type="button" data-view="games" aria-pressed="false">Games</button>
+      <button class="nav-btn" type="button" data-view="badges" aria-pressed="false">Badges</button>
     </nav>
 
     <section class="progress-strip" id="progress-strip" aria-label="Quest progress">
@@ -162,7 +164,48 @@
     </main>
 
     <main class="view hidden" id="games-view">
-      <section class="games-grid" aria-label="StudyQuest games">
+      <section class="game-library-hero">
+        <p class="eyebrow">Game Library</p>
+        <h2>Practice that feels like play</h2>
+        <p>
+          Every game opens on its own page with a short training guide, so you know the goal and
+          controls before you start. Pick a quick challenge below or browse the full library.
+        </p>
+        <div class="games-hub-actions">
+          <a class="game-play-link" href="games/library.html">Browse full library</a>
+        </div>
+      </section>
+
+      <section class="games-hub" aria-label="Featured games">
+        <div class="games-hub-grid">
+          <article class="games-hub-card">
+            <span class="game-card-tag">Arcade</span>
+            <h3>Star Catcher</h3>
+            <p>Move your catcher and collect stars before time runs out.</p>
+            <a class="game-play-link" href="games/star-catcher.html">Play</a>
+          </article>
+          <article class="games-hub-card">
+            <span class="game-card-tag">Memory</span>
+            <h3>Memory Lights</h3>
+            <p>Repeat the light pattern as it grows longer each round.</p>
+            <a class="game-play-link" href="games/memory-lights.html">Play</a>
+          </article>
+          <article class="games-hub-card">
+            <span class="game-card-tag">Math</span>
+            <h3>Math Blaster</h3>
+            <p>Answer mental math questions before the timer ends.</p>
+            <a class="game-play-link" href="games/math-blaster.html">Play</a>
+          </article>
+          <article class="games-hub-card">
+            <span class="game-card-tag">Words</span>
+            <h3>Word Sprint</h3>
+            <p>Unscramble vocabulary words as fast as you can.</p>
+            <a class="game-play-link" href="games/word-sprint.html">Play</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="games-grid hidden" aria-label="Legacy embedded games">
         <article class="game-panel" aria-labelledby="star-title">
           <div class="game-head">
             <div>
@@ -212,6 +255,45 @@
             <button class="primary-btn" type="button" id="lights-start-btn">Start pattern</button>
           </div>
         </article>
+
+        <article class="game-panel" aria-labelledby="math-blaster-title">
+          <div class="game-head">
+            <div>
+              <p class="eyebrow">Quick Math</p>
+              <h2 id="math-blaster-title">Math Blaster</h2>
+            </div>
+            <div class="score-pill">Score <strong id="mb-score">0</strong></div>
+          </div>
+
+          <p class="game-copy">
+            Solve math problems quickly before the time runs out!
+          </p>
+
+          <div class="math-blaster-stage">
+            <div class="mb-display">
+              <span id="mb-equation">Press Start!</span>
+            </div>
+            <div class="mb-options" id="mb-options"></div>
+            <div class="game-hud">
+              <span>Time <strong id="mb-time">30</strong></span>
+            </div>
+            <p class="game-feedback" id="mb-feedback" aria-live="polite">Ready?</p>
+            <button class="primary-btn" type="button" id="mb-start-btn">Start Game</button>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <main class="view hidden" id="badges-view">
+      <section class="guide-hero">
+        <div>
+          <p class="eyebrow">Your Achievements</p>
+          <h2>Earn Badges</h2>
+          <p>Complete challenges, build streaks, and level up to earn these badges!</p>
+        </div>
+      </section>
+      <section class="badges-grid" id="badges-grid" aria-label="Unlocked Badges">
+        <!-- Badges will be injected here -->
       </section>
     </main>
   </div>

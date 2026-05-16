@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Equation Dash</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="games.css">
+  <style>
+    .dash-board {
+      border: 1px solid #dfe8e5;
+      border-radius: 18px;
+      padding: 24px;
+      background: #ffffff;
+      box-shadow: 0 12px 30px rgba(28, 42, 38, 0.08);
+    }
+    .dash-equation {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+    .dash-options {
+      display: grid;
+      gap: 12px;
+    }
+    .dash-options button {
+      width: 100%;
+    }
+    .dash-status {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">SQ</span>
+        <div>
+          <p class="grade-label">Fifth Grade Learning</p>
+          <h1>Equation Dash</h1>
+        </div>
+      </div>
+      <div class="game-topbar-actions">
+        <a class="game-nav-link" href="library.html">Game library</a>
+        <a class="game-nav-link game-nav-link--accent" href="../index.html">StudyQuest Home</a>
+      </div>
+    </header>
+
+    <main class="game-page-stack">
+      <section class="guide-hero">
+        <div>
+          <p class="eyebrow">Algebra practice</p>
+          <h2>Solve for the missing value under pressure</h2>
+          <p>Pick the correct value for x before the timer runs out.</p>
+        </div>
+      </section>
+
+      <section class="game-how-to" aria-label="How to play Equation Dash">
+        <h3>How to play</h3>
+        <ol>
+          <li>Click <strong>Start Game</strong> to begin a 30-second round.</li>
+          <li>Read the equation and choose the value of x that makes it true.</li>
+          <li>Each correct answer adds to your score.</li>
+        </ol>
+        <p class="game-how-to-tip">
+          <strong>Example:</strong> For <strong>x + 5 = 12</strong>, the answer is <strong>7</strong> because 7 + 5 = 12.
+        </p>
+      </section>
+
+      <section class="dash-board">
+        <div class="dash-equation">
+          <span class="eyebrow">Solve for x</span>
+          <h2 id="equation-text">Press Start</h2>
+        </div>
+        <div class="dash-options" id="option-buttons"></div>
+        <div class="dash-status">
+          <div class="stat"><span class="stat-label">Score</span><strong id="dash-score">0</strong></div>
+          <div class="stat"><span class="stat-label">Time</span><strong id="dash-time">30</strong></div>
+          <div class="stat"><span class="stat-label">Correct</span><strong id="dash-correct">0</strong></div>
+        </div>
+        <p class="game-feedback" id="dash-message">Press Start to begin.</p>
+        <button class="primary-btn" id="dash-start" type="button">Start Game</button>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const equationText = document.getElementById('equation-text');
+    const optionButtons = document.getElementById('option-buttons');
+    const scoreEl = document.getElementById('dash-score');
+    const timeEl = document.getElementById('dash-time');
+    const correctEl = document.getElementById('dash-correct');
+    const message = document.getElementById('dash-message');
+    const startBtn = document.getElementById('dash-start');
+
+    const state = { running: false, score: 0, correct: 0, timeLeft: 30, answer: null, timerId: null };
+
+    function randomProblem() {
+      const type = Math.floor(Math.random() * 4);
+      let a = Math.floor(Math.random() * 9) + 2;
+      let b = Math.floor(Math.random() * 9) + 2;
+      let answer;
+      let text;
+
+      if (type === 0) {
+        answer = a;
+        text = `x + ${b} = ${a + b}`;
+      } else if (type === 1) {
+        if (a < b) [a, b] = [b, a];
+        answer = a - b;
+        text = `x - ${b} = ${answer}`;
+      } else if (type === 2) {
+        answer = a;
+        text = `${b}x = ${a * b}`;
+      } else {
+        answer = a;
+        text = `x / ${b} = ${a / b}`;
+        if (!Number.isInteger(a / b)) {
+          answer = b;
+          text = `${a}x = ${a * b}`;
+        }
+      }
+
+      return { text, answer };
+    }
+
+    function renderProblem() {
+      const { text, answer } = randomProblem();
+      state.answer = answer;
+      equationText.textContent = text;
+      optionButtons.innerHTML = '';
+
+      const choices = new Set([answer]);
+      while (choices.size < 4) {
+        const offset = Math.floor(Math.random() * 9) - 4;
+        if (offset === 0) continue;
+        const candidate = answer + offset;
+        if (candidate >= 0) choices.add(candidate);
+      }
+
+      Array.from(choices).sort(() => Math.random() - 0.5).forEach((value) => {
+        const btn = document.createElement('button');
+        btn.className = 'primary-btn';
+        btn.type = 'button';
+        btn.textContent = value;
+        btn.addEventListener('click', () => selectAnswer(value));
+        optionButtons.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(value) {
+      if (!state.running) return;
+      if (value === state.answer) {
+        state.score += 15;
+        state.correct += 1;
+        message.textContent = 'Correct! Keep going.';
+      } else {
+        message.textContent = `Not quite. x = ${state.answer}. Next one!`;
+      }
+      scoreEl.textContent = state.score;
+      correctEl.textContent = state.correct;
+      renderProblem();
+    }
+
+    function endGame() {
+      state.running = false;
+      clearInterval(state.timerId);
+      message.textContent = `Time's up! You scored ${state.score} with ${state.correct} correct.`;
+      equationText.textContent = 'Game over';
+      optionButtons.innerHTML = '';
+      startBtn.textContent = 'Play Again';
+    }
+
+    function startGame() {
+      state.running = true;
+      state.score = 0;
+      state.correct = 0;
+      state.timeLeft = 30;
+      scoreEl.textContent = '0';
+      correctEl.textContent = '0';
+      timeEl.textContent = '30';
+      message.textContent = 'Solve as many equations as you can!';
+      startBtn.textContent = 'Restart';
+      renderProblem();
+      clearInterval(state.timerId);
+      state.timerId = setInterval(() => {
+        state.timeLeft -= 1;
+        timeEl.textContent = state.timeLeft;
+        if (state.timeLeft <= 0) endGame();
+      }, 1000);
+    }
+
+    startBtn.addEventListener('click', startGame);
+  </script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Algebra Sprint</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="games.css">
+  <style>
+    .sprint-board {
+      border: 1px solid #dfe8e5;
+      border-radius: 18px;
+      padding: 24px;
+      background: #ffffff;
+      box-shadow: 0 12px 30px rgba(28, 42, 38, 0.08);
+    }
+    .sprint-equation {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+    .sprint-options {
+      display: grid;
+      gap: 12px;
+    }
+    .sprint-options button {
+      width: 100%;
+    }
+    .sprint-status {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">SQ</span>
+        <div>
+          <p class="grade-label">Ninth Grade Learning</p>
+          <h1>Algebra Sprint</h1>
+        </div>
+      </div>
+      <div class="game-topbar-actions">
+        <a class="game-nav-link" href="library.html">Game library</a>
+        <a class="game-nav-link game-nav-link--accent" href="../index.html">StudyQuest Home</a>
+      </div>
+    </header>
+
+    <main class="game-page-stack">
+      <section class="guide-hero">
+        <div>
+          <p class="eyebrow">Algebra practice</p>
+          <h2>Solve algebra problems in a timed sprint</h2>
+          <p>Choose the correct value for x before time runs out.</p>
+        </div>
+      </section>
+
+      <section class="game-how-to" aria-label="How to play Algebra Sprint">
+        <h3>How to play</h3>
+        <ol>
+          <li>Click <strong>Start Sprint</strong> to begin a 45-second round.</li>
+          <li>Read each equation and pick the value of x that makes it true.</li>
+          <li>Harder problems are worth more points.</li>
+        </ol>
+        <p class="game-how-to-tip">
+          <strong>Learning tip:</strong> Do the same operation on both sides of the equation to isolate x.
+        </p>
+      </section>
+
+      <section class="sprint-board">
+        <div class="sprint-equation">
+          <span class="eyebrow">Solve for x</span>
+          <h2 id="equation-text">Press Start</h2>
+        </div>
+        <div class="sprint-options" id="option-buttons"></div>
+        <div class="sprint-status">
+          <div class="stat"><span class="stat-label">Score</span><strong id="sprint-score">0</strong></div>
+          <div class="stat"><span class="stat-label">Time</span><strong id="sprint-time">45</strong></div>
+          <div class="stat"><span class="stat-label">Correct</span><strong id="sprint-correct">0</strong></div>
+        </div>
+        <p class="game-feedback" id="sprint-message">Press Start to begin.</p>
+        <button class="primary-btn" id="sprint-start" type="button">Start Sprint</button>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const equationText = document.getElementById('equation-text');
+    const optionButtons = document.getElementById('option-buttons');
+    const scoreEl = document.getElementById('sprint-score');
+    const timeEl = document.getElementById('sprint-time');
+    const correctEl = document.getElementById('sprint-correct');
+    const message = document.getElementById('sprint-message');
+    const startBtn = document.getElementById('sprint-start');
+
+    const state = { running: false, score: 0, correct: 0, timeLeft: 45, answer: null, points: 15, timerId: null };
+
+    const bank = [
+      { text: '3x - 5 = 16', answer: 7, points: 20 },
+      { text: '2(x + 4) = 18', answer: 5, points: 20 },
+      { text: '5x - 2 = 3x + 8', answer: 5, points: 20 },
+      { text: 'x / 4 + 6 = 10', answer: 16, points: 20 },
+      { text: '4x + 9 = 25', answer: 4, points: 15 },
+      { text: '-2x + 14 = 6', answer: 4, points: 20 },
+      { text: '7x = 63', answer: 9, points: 15 },
+      { text: 'x - 11 = -3', answer: 8, points: 15 }
+    ];
+
+    function randomProblem() {
+      if (Math.random() < 0.55) {
+        const item = bank[Math.floor(Math.random() * bank.length)];
+        return { text: item.text, answer: item.answer, points: item.points };
+      }
+
+      const a = Math.floor(Math.random() * 7) + 2;
+      const answer = Math.floor(Math.random() * 8) + 2;
+      const b = Math.floor(Math.random() * 9) + 1;
+      const c = a * answer + b;
+      return { text: `${a}x + ${b} = ${c}`, answer, points: 15 };
+    }
+
+    function renderProblem() {
+      const problem = randomProblem();
+      state.answer = problem.answer;
+      state.points = problem.points;
+      equationText.textContent = problem.text;
+      optionButtons.innerHTML = '';
+
+      const choices = new Set([problem.answer]);
+      while (choices.size < 4) {
+        const offset = Math.floor(Math.random() * 11) - 5;
+        if (offset === 0) continue;
+        choices.add(problem.answer + offset);
+      }
+
+      Array.from(choices).sort(() => Math.random() - 0.5).forEach((value) => {
+        const btn = document.createElement('button');
+        btn.className = 'primary-btn';
+        btn.type = 'button';
+        btn.textContent = value;
+        btn.addEventListener('click', () => selectAnswer(value));
+        optionButtons.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(value) {
+      if (!state.running) return;
+      if (value === state.answer) {
+        state.score += state.points;
+        state.correct += 1;
+        message.textContent = `Correct! +${state.points} points.`;
+      } else {
+        message.textContent = `Not quite. x = ${state.answer}.`;
+      }
+      scoreEl.textContent = state.score;
+      correctEl.textContent = state.correct;
+      renderProblem();
+    }
+
+    function endGame() {
+      state.running = false;
+      clearInterval(state.timerId);
+      message.textContent = `Sprint over! Score: ${state.score} (${state.correct} correct).`;
+      equationText.textContent = 'Game over';
+      optionButtons.innerHTML = '';
+      startBtn.textContent = 'Play Again';
+    }
+
+    function startGame() {
+      state.running = true;
+      state.score = 0;
+      state.correct = 0;
+      state.timeLeft = 45;
+      scoreEl.textContent = '0';
+      correctEl.textContent = '0';
+      timeEl.textContent = '45';
+      message.textContent = 'Solve as many equations as you can!';
+      startBtn.textContent = 'Restart';
+      renderProblem();
+      clearInterval(state.timerId);
+      state.timerId = setInterval(() => {
+        state.timeLeft -= 1;
+        timeEl.textContent = state.timeLeft;
+        if (state.timeLeft <= 0) endGame();
+      }, 1000);
+    }
+
+    startBtn.addEventListener('click', startGame);
+  </script>
+</body>
+</html>

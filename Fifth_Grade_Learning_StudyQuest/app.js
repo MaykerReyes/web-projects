@@ -37,8 +37,16 @@
     views: {
       quest: document.getElementById("quest-view"),
       guide: document.getElementById("guide-view"),
-      games: document.getElementById("games-view")
+      games: document.getElementById("games-view"),
+      badges: document.getElementById("badges-view")
     },
+    badgesGrid: document.getElementById("badges-grid"),
+    mbEquation: document.getElementById("mb-equation"),
+    mbOptions: document.getElementById("mb-options"),
+    mbScore: document.getElementById("mb-score"),
+    mbTime: document.getElementById("mb-time"),
+    mbFeedback: document.getElementById("mb-feedback"),
+    mbStartBtn: document.getElementById("mb-start-btn"),
     starCanvas: document.getElementById("star-canvas"),
     starScore: document.getElementById("star-score"),
     starTime: document.getElementById("star-time"),
@@ -49,7 +57,12 @@
     lightPads: [...document.querySelectorAll(".light-pad")],
     lightsRound: document.getElementById("lights-round"),
     lightsFeedback: document.getElementById("lights-feedback"),
-    lightsStartBtn: document.getElementById("lights-start-btn")
+    lightsStartBtn: document.getElementById("lights-start-btn"),
+    snakeCanvas: document.getElementById("snake-canvas"),
+    snakeScore: document.getElementById("snake-score"),
+    snakeBest: document.getElementById("snake-best"),
+    snakeFeedback: document.getElementById("snake-feedback"),
+    snakeStartBtn: document.getElementById("snake-start-btn")
   };
 
   function pathKeyFor(subject, topic) {
@@ -84,6 +97,7 @@
   };
 
   const starContext = elements.starCanvas.getContext("2d");
+  const snakeContext = elements.snakeCanvas ? elements.snakeCanvas.getContext("2d") : null;
   const starState = {
     running: false,
     score: 0,
@@ -104,6 +118,51 @@
     accepting: false,
     playToken: 0
   };
+
+  const mbState = {
+    running: false,
+    score: 0,
+    timeLeft: 30,
+    timerId: null,
+    correctAnswer: null
+  };
+
+  const snakeState = {
+    running: false,
+    score: 0,
+    best: Number(localStorage.getItem("studyQuestSnakeBest")) || 0,
+    snake: [{x: 10, y: 10}],
+    dir: {x: 1, y: 0},
+    nextDir: {x: 1, y: 0},
+    food: {x: 15, y: 15},
+    animationId: null,
+    speed: 150,
+    lastTick: 0
+  };
+
+  const badgeDefs = [
+    { id: "b1", title: "Beginner", desc: "Earn 50 XP", reqXp: 50, icon: "🌟" },
+    { id: "b2", title: "Learner", desc: "Earn 200 XP", reqXp: 200, icon: "📚" },
+    { id: "b3", title: "Scholar", desc: "Earn 500 XP", reqXp: 500, icon: "🎓" },
+    { id: "b4", title: "Genius", desc: "Earn 1000 XP", reqXp: 1000, icon: "💡" },
+    { id: "b5", title: "Master", desc: "Earn 2500 XP", reqXp: 2500, icon: "👑" }
+  ];
+
+  function renderBadges() {
+    if (!elements.badgesGrid) return;
+    elements.badgesGrid.innerHTML = "";
+    badgeDefs.forEach(b => {
+      const isUnlocked = state.xp >= b.reqXp;
+      const el = document.createElement("div");
+      el.className = `badge-item ${isUnlocked ? "" : "locked"}`;
+      el.innerHTML = `
+        <div class="badge-icon">${b.icon}</div>
+        <div class="badge-title">${b.title}</div>
+        <div class="badge-desc">${b.desc}</div>
+      `;
+      elements.badgesGrid.appendChild(el);
+    });
+  }
 
   function visiblePathKeys(subject = state.selectedSubject) {
     if (subject === SUBJECT_ALL) {
@@ -312,6 +371,7 @@
     elements.levelCounter.textContent = Math.floor(state.xp / 250) + 1;
     elements.progressBar.style.width = `${percent}%`;
     elements.masteryLabel.textContent = `${completed} of ${total} mastered${subjectSuffix}`;
+    renderBadges();
   }
 
   function setView(viewName) {
@@ -829,6 +889,96 @@
     window.setTimeout(addLightsRound, 850);
   }
 
+  function generateMbProblem() {
+    const ops = ["+", "-", "x"];
+    const op = ops[Math.floor(Math.random() * ops.length)];
+    let a, b, ans;
+    if (op === "+") {
+      a = Math.floor(Math.random() * 50) + 1;
+      b = Math.floor(Math.random() * 50) + 1;
+      ans = a + b;
+    } else if (op === "-") {
+      a = Math.floor(Math.random() * 50) + 20;
+      b = Math.floor(Math.random() * 20) + 1;
+      ans = a - b;
+    } else {
+      a = Math.floor(Math.random() * 12) + 1;
+      b = Math.floor(Math.random() * 12) + 1;
+      ans = a * b;
+    }
+    mbState.correctAnswer = ans;
+    elements.mbEquation.textContent = `${a} ${op} ${b} = ?`;
+    
+    const options = new Set([ans]);
+    while(options.size < 4) {
+      let offset = Math.floor(Math.random() * 21) - 10;
+      if(offset === 0) offset = 1;
+      options.add(ans + offset);
+    }
+    const shuffledOptions = Array.from(options).sort(() => Math.random() - 0.5);
+    
+    elements.mbOptions.innerHTML = "";
+    shuffledOptions.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.className = "mb-option-btn";
+      btn.textContent = opt;
+      btn.onclick = () => handleMbAnswer(opt, btn);
+      elements.mbOptions.appendChild(btn);
+    });
+  }
+
+  function handleMbAnswer(selected, btn) {
+    if (!mbState.running) return;
+    const buttons = elements.mbOptions.querySelectorAll("button");
+    buttons.forEach(b => b.disabled = true);
+    
+    if (selected === mbState.correctAnswer) {
+      btn.classList.add("correct");
+      mbState.score += 10;
+      elements.mbScore.textContent = mbState.score;
+      elements.mbFeedback.textContent = "Correct! +10 points";
+      setTimeout(() => {
+        if (mbState.running) generateMbProblem();
+      }, 500);
+    } else {
+      btn.classList.add("wrong");
+      elements.mbFeedback.textContent = "Wrong! Try again.";
+      setTimeout(() => {
+        if (mbState.running) generateMbProblem();
+      }, 800);
+    }
+  }
+
+  function startMbGame() {
+    mbState.running = true;
+    mbState.score = 0;
+    mbState.timeLeft = 30;
+    elements.mbScore.textContent = "0";
+    elements.mbTime.textContent = "30";
+    elements.mbFeedback.textContent = "Go!";
+    elements.mbStartBtn.textContent = "Restart Game";
+    
+    clearInterval(mbState.timerId);
+    mbState.timerId = setInterval(() => {
+      mbState.timeLeft--;
+      elements.mbTime.textContent = mbState.timeLeft;
+      if (mbState.timeLeft <= 0) {
+        endMbGame();
+      }
+    }, 1000);
+    
+    generateMbProblem();
+  }
+
+  function endMbGame() {
+    mbState.running = false;
+    clearInterval(mbState.timerId);
+    elements.mbOptions.innerHTML = "";
+    elements.mbEquation.textContent = "Time's Up!";
+    elements.mbFeedback.textContent = `Game Over! You scored ${mbState.score} points.`;
+    awardXp(mbState.score);
+  }
+
   function resetProgress() {
     const confirmed = window.confirm("Reset StudyQuest progress on this browser?");
 
@@ -884,6 +1034,9 @@
     pad.addEventListener("click", () => handleLightPad(Number(pad.dataset.pad)));
   });
   elements.lightsStartBtn.addEventListener("click", startLightsGame);
+  if (elements.mbStartBtn) {
+    elements.mbStartBtn.addEventListener("click", startMbGame);
+  }
   document.addEventListener("keydown", (event) => {
     if (event.key === "ArrowLeft" || event.key.toLowerCase() === "a") {
       starState.keys.left = true;
@@ -904,6 +1057,117 @@
     }
     if (event.key === "ArrowRight" || event.key.toLowerCase() === "d") {
       starState.keys.right = false;
+    }
+  });
+
+  // --- Snake Game ---
+  function drawSnakeGame() {
+    if (!snakeContext) return;
+    const canvas = elements.snakeCanvas;
+    const ctx = snakeContext;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#12211f";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw food
+    ctx.fillStyle = "#f2b84b";
+    ctx.fillRect(snakeState.food.x * 20, snakeState.food.y * 20, 18, 18);
+    
+    // Draw snake
+    ctx.fillStyle = "#28a87d";
+    snakeState.snake.forEach((seg, i) => {
+      ctx.fillRect(seg.x * 20, seg.y * 20, 18, 18);
+    });
+  }
+
+  function endSnakeGame() {
+    snakeState.running = false;
+    window.cancelAnimationFrame(snakeState.animationId);
+    snakeState.animationId = null;
+    if (snakeState.score > snakeState.best) {
+      snakeState.best = snakeState.score;
+      localStorage.setItem("studyQuestSnakeBest", String(snakeState.best));
+    }
+    const earnedXp = Math.min(30, snakeState.score);
+    if (earnedXp > 0) awardXp(earnedXp);
+    
+    elements.snakeFeedback.textContent = `Game over! Score: ${snakeState.score}. Earned ${earnedXp} XP.`;
+    elements.snakeStartBtn.textContent = "Play again";
+    elements.snakeBest.textContent = snakeState.best;
+    elements.snakeScore.textContent = snakeState.score;
+  }
+
+  function stepSnakeGame(timestamp) {
+    if (!snakeState.running) return;
+    
+    if (timestamp - snakeState.lastTick > snakeState.speed) {
+      snakeState.lastTick = timestamp;
+      snakeState.dir = snakeState.nextDir;
+      
+      const head = { ...snakeState.snake[0] };
+      head.x += snakeState.dir.x;
+      head.y += snakeState.dir.y;
+      
+      // Collision
+      if (head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20) {
+        endSnakeGame();
+        return;
+      }
+      for (let i = 0; i < snakeState.snake.length; i++) {
+        if (head.x === snakeState.snake[i].x && head.y === snakeState.snake[i].y) {
+          endSnakeGame();
+          return;
+        }
+      }
+      
+      snakeState.snake.unshift(head);
+      
+      if (head.x === snakeState.food.x && head.y === snakeState.food.y) {
+        snakeState.score += 1;
+        snakeState.speed = Math.max(50, snakeState.speed - 2);
+        elements.snakeScore.textContent = snakeState.score;
+        elements.snakeFeedback.textContent = "Yum!";
+        snakeState.food = {
+          x: Math.floor(Math.random() * 20),
+          y: Math.floor(Math.random() * 20)
+        };
+      } else {
+        snakeState.snake.pop();
+      }
+      drawSnakeGame();
+    }
+    
+    snakeState.animationId = window.requestAnimationFrame(stepSnakeGame);
+  }
+
+  function startSnakeGame() {
+    window.cancelAnimationFrame(snakeState.animationId);
+    snakeState.running = true;
+    snakeState.score = 0;
+    snakeState.snake = [{x: 10, y: 10}, {x: 9, y: 10}, {x: 8, y: 10}];
+    snakeState.dir = {x: 1, y: 0};
+    snakeState.nextDir = {x: 1, y: 0};
+    snakeState.food = {x: 15, y: 10};
+    snakeState.speed = 150;
+    snakeState.lastTick = performance.now();
+    elements.snakeScore.textContent = snakeState.score;
+    elements.snakeBest.textContent = snakeState.best;
+    elements.snakeFeedback.textContent = "Use arrow keys to move!";
+    elements.snakeStartBtn.textContent = "Restart";
+    drawSnakeGame();
+    snakeState.animationId = window.requestAnimationFrame(stepSnakeGame);
+  }
+
+  if (elements.snakeStartBtn) {
+    elements.snakeStartBtn.addEventListener("click", startSnakeGame);
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (snakeState.running) {
+      if (event.key === "ArrowUp" && snakeState.dir.y !== 1) { snakeState.nextDir = {x: 0, y: -1}; event.preventDefault(); }
+      if (event.key === "ArrowDown" && snakeState.dir.y !== -1) { snakeState.nextDir = {x: 0, y: 1}; event.preventDefault(); }
+      if (event.key === "ArrowLeft" && snakeState.dir.x !== 1) { snakeState.nextDir = {x: -1, y: 0}; event.preventDefault(); }
+      if (event.key === "ArrowRight" && snakeState.dir.x !== -1) { snakeState.nextDir = {x: 1, y: 0}; event.preventDefault(); }
     }
   });
 

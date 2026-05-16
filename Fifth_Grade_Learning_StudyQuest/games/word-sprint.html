@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Word Sprint</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="games.css">
+  <style>
+    .sprint-page {
+      max-width: 840px;
+      margin: 0 auto;
+      display: grid;
+      gap: 18px;
+    }
+    .scramble-box {
+      border: 1px solid #dfe8e5;
+      border-radius: 18px;
+      padding: 22px;
+      background: #ffffff;
+      box-shadow: 0 12px 30px rgba(28, 42, 38, 0.08);
+      text-align: center;
+    }
+    .word-options {
+      display: grid;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">SQ</span>
+        <div>
+          <p class="grade-label">Fifth Grade Learning</p>
+          <h1>Word Sprint</h1>
+        </div>
+      </div>
+      <div class="game-topbar-actions">
+        <a class="game-nav-link" href="library.html">← Game Library</a>
+        <a class="game-nav-link game-nav-link--accent" href="../index.html">StudyQuest Home</a>
+      </div>
+    </header>
+
+    <main class="game-page-stack">
+      <section class="guide-hero">
+        <div>
+          <p class="eyebrow">Word game</p>
+          <h2>Unscramble the word</h2>
+          <p>Choose the right answer before the timer runs out.</p>
+        </div>
+      </section>
+
+      <section class="game-how-to" aria-label="How to play Word Sprint">
+        <h3>How to play</h3>
+        <ol>
+          <li>Click <strong>Start Sprint</strong> to begin.</li>
+          <li>Look at the scrambled letters and pick the real word from the choices.</li>
+          <li>Each correct word adds to your score before the timer ends.</li>
+        </ol>
+        <p class="game-how-to-tip">
+          <strong>Learning tip:</strong> Spot common letter pairs (th, ch, ing) or vowels first to unscramble faster.
+        </p>
+      </section>
+
+      <section class="scramble-box">
+        <span class="eyebrow">Scrambled word</span>
+        <h2 id="scramble-text">Press Start</h2>
+        <div class="word-options" id="word-options"></div>
+        <div class="game-status" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px;">
+          <div class="stat"><span class="stat-label">Score</span><strong id="sprint-score">0</strong></div>
+          <div class="stat"><span class="stat-label">Round</span><strong id="sprint-round">0</strong></div>
+          <div class="stat"><span class="stat-label">Time</span><strong id="sprint-time">30</strong></div>
+        </div>
+        <p class="game-feedback" id="sprint-message">Press Start to play.</p>
+        <button class="primary-btn" id="sprint-start">Start Sprint</button>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const scrambleText = document.getElementById('scramble-text');
+    const optionsArea = document.getElementById('word-options');
+    const scoreEl = document.getElementById('sprint-score');
+    const roundEl = document.getElementById('sprint-round');
+    const timeEl = document.getElementById('sprint-time');
+    const message = document.getElementById('sprint-message');
+    const startButton = document.getElementById('sprint-start');
+
+    const questions = [
+      { word: 'planet', scramble: 'etlanp' },
+      { word: 'garden', scramble: 'grenda' },
+      { word: 'puzzle', scramble: 'zlpeuz' },
+      { word: 'pizza', scramble: 'aizpz' },
+      { word: 'circle', scramble: 'lcirce' },
+      { word: 'forest', scramble: 'tserof' },
+      { word: 'shiny', scramble: 'yhsin' },
+      { word: 'bridge', scramble: 'gerbid' }
+    ];
+
+    const state = {
+      active: false,
+      score: 0,
+      round: 0,
+      timeLeft: 30,
+      answer: '',
+      timerId: null
+    };
+
+    function pickQuestion() {
+      const choice = questions[Math.floor(Math.random() * questions.length)];
+      state.answer = choice.word;
+      scrambleText.textContent = choice.scramble;
+
+      const choices = new Set([choice.word]);
+      while (choices.size < 4) {
+        const wrong = questions[Math.floor(Math.random() * questions.length)].word;
+        choices.add(wrong);
+      }
+      optionsArea.innerHTML = '';
+      Array.from(choices).sort(() => Math.random() - 0.5).forEach(word => {
+        const btn = document.createElement('button');
+        btn.className = 'primary-btn';
+        btn.type = 'button';
+        btn.textContent = word;
+        btn.addEventListener('click', () => handleChoice(word));
+        optionsArea.appendChild(btn);
+      });
+    }
+
+    function handleChoice(word) {
+      if (!state.active) return;
+      if (word === state.answer) {
+        state.score += 10;
+        state.round += 1;
+        scoreEl.textContent = state.score;
+        roundEl.textContent = state.round;
+        message.textContent = 'Nice! Keep going.';
+        pickQuestion();
+      } else {
+        message.textContent = 'Try again.';
+      }
+    }
+
+    function endGame() {
+      state.active = false;
+      clearInterval(state.timerId);
+      scrambleText.textContent = 'Game Over';
+      optionsArea.innerHTML = '';
+      message.textContent = `Finish! You scored ${state.score} points.`;
+      startButton.textContent = 'Play Again';
+    }
+
+    function startGame() {
+      state.active = true;
+      state.score = 0;
+      state.round = 0;
+      state.timeLeft = 30;
+      scoreEl.textContent = '0';
+      roundEl.textContent = '0';
+      timeEl.textContent = '30';
+      message.textContent = 'Find the right word quickly!';
+      startButton.textContent = 'Restart';
+      pickQuestion();
+      clearInterval(state.timerId);
+      state.timerId = setInterval(() => {
+        state.timeLeft -= 1;
+        timeEl.textContent = state.timeLeft;
+        if (state.timeLeft <= 0) endGame();
+      }, 1000);
+    }
+
+    startButton.addEventListener('click', startGame);
+  </script>
+</body>
+</html>

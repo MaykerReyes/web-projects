@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Star Catcher</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="games.css">
+  <style>
+    .game-page {
+      display: grid;
+      gap: 18px;
+      max-width: 920px;
+      margin: 0 auto;
+    }
+    .game-canvas-wrap {
+      position: relative;
+      display: grid;
+      gap: 10px;
+    }
+    .game-info {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    canvas {
+      border-radius: 16px;
+      width: 100%;
+      max-width: 920px;
+      background: #12211f;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">SQ</span>
+        <div>
+          <p class="grade-label">Fifth Grade Learning</p>
+          <h1>Star Catcher</h1>
+        </div>
+      </div>
+      <div class="game-topbar-actions">
+        <a class="game-nav-link" href="library.html">← Game Library</a>
+        <a class="game-nav-link game-nav-link--accent" href="../index.html">StudyQuest Home</a>
+      </div>
+    </header>
+
+    <main class="game-page-stack">
+      <section class="guide-hero">
+        <div>
+          <p class="eyebrow">Catch the stars</p>
+          <h2>Use your catcher to collect stars</h2>
+          <p>Move left and right with the arrow keys. Catch as many stars as you can before the timer hits zero.</p>
+        </div>
+      </section>
+
+      <section class="game-how-to" aria-label="How to play Star Catcher">
+        <h3>How to play</h3>
+        <ol>
+          <li>Click <strong>Start Game</strong> to begin a 30-second round.</li>
+          <li>Press <strong>←</strong> and <strong>→</strong> to move the green catcher at the bottom.</li>
+          <li>Each star you catch adds 1 point. Your best score is saved on this device.</li>
+        </ol>
+        <p class="game-how-to-tip">
+          <strong>Learning tip:</strong> Watch where stars are falling and move early — waiting until the last second makes catches harder.
+        </p>
+      </section>
+
+      <section class="game-canvas-wrap">
+        <canvas id="game-canvas" width="880" height="480" aria-label="Star Catcher game"></canvas>
+        <div class="game-info">
+          <div class="stat"><span class="stat-label">Score</span><strong id="score-value">0</strong></div>
+          <div class="stat"><span class="stat-label">Time</span><strong id="time-value">30</strong></div>
+          <div class="stat"><span class="stat-label">Best</span><strong id="best-value">0</strong></div>
+        </div>
+        <p class="game-feedback" id="game-message">Press Start to begin.</p>
+        <button class="primary-btn" id="start-button" type="button">Start Game</button>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('game-canvas');
+    const ctx = canvas.getContext('2d');
+    const scoreValue = document.getElementById('score-value');
+    const timeValue = document.getElementById('time-value');
+    const bestValue = document.getElementById('best-value');
+    const message = document.getElementById('game-message');
+    const startButton = document.getElementById('start-button');
+
+    const state = {
+      running: false,
+      score: 0,
+      timeLeft: 30,
+      playerX: canvas.width / 2,
+      stars: [],
+      keys: { left: false, right: false },
+      lastFrame: 0,
+      animation: null,
+      best: Number(localStorage.getItem('starCatcherBest') || 0)
+    };
+
+    function draw() {
+      ctx.fillStyle = '#081916';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#ffda6a';
+      state.stars.forEach(star => {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      ctx.fillStyle = '#39d7a5';
+      ctx.fillRect(state.playerX - 60, canvas.height - 40, 120, 24);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '22px system-ui';
+      ctx.textAlign = 'center';
+      if (!state.running) {
+        ctx.fillText('Press Start to catch stars', canvas.width / 2, canvas.height / 2);
+      }
+    }
+
+    function spawnStar() {
+      state.stars.push({
+        x: 30 + Math.random() * (canvas.width - 60),
+        y: -20,
+        radius: 10 + Math.random() * 8,
+        speed: 120 + Math.random() * 80
+      });
+    }
+
+    function update(timestamp) {
+      if (!state.running) return;
+      const delta = (timestamp - state.lastFrame) / 1000;
+      state.lastFrame = timestamp;
+      state.timeLeft = Math.max(0, state.timeLeft - delta);
+
+      if (state.keys.left) state.playerX -= 380 * delta;
+      if (state.keys.right) state.playerX += 380 * delta;
+      state.playerX = Math.min(canvas.width - 60, Math.max(60, state.playerX));
+
+      if (Math.random() < delta * 2.2) spawnStar();
+
+      state.stars = state.stars.filter(star => {
+        star.y += star.speed * delta;
+        const caught = star.y > canvas.height - 48 && Math.abs(star.x - state.playerX) < 60;
+        if (caught) {
+          state.score += 1;
+          return false;
+        }
+        return star.y < canvas.height + 20;
+      });
+
+      scoreValue.textContent = state.score;
+      timeValue.textContent = Math.ceil(state.timeLeft);
+      bestValue.textContent = state.best;
+
+      draw();
+
+      if (state.timeLeft <= 0) {
+        endGame();
+      } else {
+        state.animation = requestAnimationFrame(update);
+      }
+    }
+
+    function startGame() {
+      state.running = true;
+      state.score = 0;
+      state.timeLeft = 30;
+      state.playerX = canvas.width / 2;
+      state.stars = [];
+      state.lastFrame = performance.now();
+      message.textContent = 'Catch as many stars as you can!';
+      startButton.textContent = 'Restart';
+      state.animation = requestAnimationFrame(update);
+    }
+
+    function endGame() {
+      state.running = false;
+      cancelAnimationFrame(state.animation);
+      if (state.score > state.best) {
+        state.best = state.score;
+        localStorage.setItem('starCatcherBest', state.best);
+      }
+      message.textContent = `Game over! You caught ${state.score} stars.`;
+      bestValue.textContent = state.best;
+      draw();
+    }
+
+    window.addEventListener('keydown', event => {
+      if (event.key === 'ArrowLeft') state.keys.left = true;
+      if (event.key === 'ArrowRight') state.keys.right = true;
+    });
+    window.addEventListener('keyup', event => {
+      if (event.key === 'ArrowLeft') state.keys.left = false;
+      if (event.key === 'ArrowRight') state.keys.right = false;
+    });
+
+    startButton.addEventListener('click', () => {
+      if (state.running) {
+        cancelAnimationFrame(state.animation);
+      }
+      startGame();
+    });
+
+    draw();
+  </script>
+</body>
+</html>

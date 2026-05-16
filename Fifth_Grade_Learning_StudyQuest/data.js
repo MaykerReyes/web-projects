@@ -869,6 +869,312 @@
       options: ["Choosing leaders or deciding issues", "Measuring mountains", "Writing fiction", "Planting crops"],
       correctAnswer: "Choosing leaders or deciding issues",
       explanation: "Voting is one way citizens take part in government."
+    },
+    {
+      id: 318,
+      subject: "Math",
+      topic: "Geometry",
+      question: "What is the perimeter of a square with 6 cm sides?",
+      options: ["12 cm", "24 cm", "36 cm", "18 cm"],
+      correctAnswer: "24 cm",
+      explanation: "A square has four equal sides. 6 + 6 + 6 + 6 = 24 cm."
+    },
+    {
+      id: 319,
+      subject: "Math",
+      topic: "Geometry",
+      question: "What do you call an angle that is exactly 180 degrees?",
+      options: ["Right angle", "Acute angle", "Straight angle", "Obtuse angle"],
+      correctAnswer: "Straight angle",
+      explanation: "A straight angle forms a straight line and measures exactly 180 degrees."
+    },
+    {
+      id: 320,
+      subject: "Math",
+      topic: "Fractions",
+      question: "What is 1/2 of 24?",
+      options: ["12", "6", "8", "14"],
+      correctAnswer: "12",
+      explanation: "Finding half of a number is the same as dividing it by 2. 24 divided by 2 is 12."
+    },
+    {
+      id: 321,
+      subject: "Math",
+      topic: "Decimals",
+      question: "What is 1.5 + 2.5?",
+      options: ["3.0", "3.5", "4.0", "4.5"],
+      correctAnswer: "4.0",
+      explanation: "Line up the decimals: 1.5 + 2.5 = 4.0."
+    },
+    {
+      id: 322,
+      subject: "Math",
+      topic: "Operations",
+      question: "What is 12 x 12?",
+      options: ["144", "124", "132", "122"],
+      correctAnswer: "144",
+      explanation: "12 multiplied by 12 equals 144."
+    },
+    {
+      id: 323,
+      subject: "Math",
+      topic: "Operations",
+      question: "Solve: 5 + 3 x 4",
+      options: ["32", "17", "12", "15"],
+      correctAnswer: "17",
+      explanation: "Use order of operations. Multiply first: 3 x 4 = 12. Then add 5: 5 + 12 = 17."
+    },
+    {
+      id: 324,
+      subject: "Math",
+      topic: "Word Problems",
+      question: "If you have 4 boxes and each box has 8 apples, how many apples do you have?",
+      options: ["12", "24", "32", "40"],
+      correctAnswer: "32",
+      explanation: "Multiply the number of boxes by the apples in each: 4 x 8 = 32."
+    },
+    {
+      id: 325,
+      subject: "Language Arts",
+      topic: "Reading",
+      question: "If a character is described as 'bold and fearless', what trait do they have?",
+      options: ["Shy", "Brave", "Quiet", "Scared"],
+      correctAnswer: "Brave",
+      explanation: "Bold and fearless are synonyms for brave."
+    },
+    {
+      id: 326,
+      subject: "Language Arts",
+      topic: "Grammar",
+      question: "Which word is a noun in the sentence 'The fast car zoomed past'?",
+      options: ["The", "fast", "car", "zoomed"],
+      correctAnswer: "car",
+      explanation: "A noun is a person, place, or thing. Car is a thing."
+    },
+    {
+      id: 327,
+      subject: "Language Arts",
+      topic: "Grammar",
+      question: "What is the past tense of 'run'?",
+      options: ["Runs", "Running", "Runned", "Ran"],
+      correctAnswer: "Ran",
+      explanation: "Ran is the past tense form of run."
+    },
+    {
+      id: 328,
+      subject: "Language Arts",
+      topic: "Vocabulary",
+      question: "What does the prefix 'pre-' mean?",
+      options: ["After", "Before", "Again", "Not"],
+      correctAnswer: "Before",
+      explanation: "The prefix pre- means before, like in preview or prepay."
+    },
+    {
+      id: 329,
+      subject: "Language Arts",
+      topic: "Vocabulary",
+      question: "Which word is an antonym for 'huge'?",
+      options: ["Giant", "Large", "Tiny", "Heavy"],
+      correctAnswer: "Tiny",
+      explanation: "An antonym is a word with the opposite meaning. Tiny is the opposite of huge."
+    },
+    {
+      id: 330,
+      subject: "Science",
+      topic: "Life Science",
+      question: "What do omnivores eat?",
+      options: ["Only plants", "Only meat", "Both plants and animals", "Only bugs"],
+      correctAnswer: "Both plants and animals",
+      explanation: "Omnivores eat a mixed diet of both plants and other animals."
+    },
+    {
+      id: 331,
+      subject: "Science",
+      topic: "Life Science",
+      question: "What is the process by which caterpillars turn into butterflies?",
+      options: ["Photosynthesis", "Metamorphosis", "Digestion", "Migration"],
+      correctAnswer: "Metamorphosis",
+      explanation: "Metamorphosis is the physical transformation process from caterpillar to butterfly."
+    },
+    {
+      id: 332,
+      subject: "Science",
+      topic: "Earth Science",
+      question: "What do you call a mountain that erupts with lava?",
+      options: ["Volcano", "Canyon", "Valley", "Glacier"],
+      correctAnswer: "Volcano",
+      explanation: "A volcano is a mountain that opens downward to a pool of molten rock."
+    },
+    {
+      id: 333,
+      subject: "Science",
+      topic: "Earth Science",
+      question: "What is the center of our solar system?",
+      options: ["Earth", "Mars", "The Sun", "The Moon"],
+      correctAnswer: "The Sun",
+      explanation: "The Sun is the star at the center of our solar system."
+    },
+    {
+      id: 334,
+      subject: "Science",
+      topic: "Physical Science",
+      question: "What force pulls objects toward the ground?",
+      options: ["Magnetism", "Friction", "Gravity", "Electricity"],
+      correctAnswer: "Gravity",
+      explanation: "Gravity is the force that pulls objects toward Earth."
+    },
+    {
+      id: 335,
+      subject: "Science",
+      topic: "Physical Science",
+      question: "Which of these is a liquid?",
+      options: ["Rock", "Milk", "Oxygen", "Wood"],
+      correctAnswer: "Milk",
+      explanation: "Milk is a liquid because it flows and takes the shape of its container."
+    },
+    {
+      id: 336,
+      subject: "Science",
+      topic: "Scientific Thinking",
+      question: "What do you use a microscope for?",
+      options: ["Looking at stars", "Looking at tiny things", "Measuring heat", "Weighing objects"],
+      correctAnswer: "Looking at tiny things",
+      explanation: "A microscope magnifies very small objects so we can see them."
+    },
+    {
+      id: 337,
+      subject: "Social Studies",
+      topic: "Geography",
+      question: "How many continents are there on Earth?",
+      options: ["5", "6", "7", "8"],
+      correctAnswer: "7",
+      explanation: "There are 7 continents: Africa, Antarctica, Asia, Europe, North America, Australia, and South America."
+    },
+    {
+      id: 338,
+      subject: "Math",
+      topic: "Operations",
+      question: "What is 125 x 4?",
+      options: ["400", "450", "500", "550"],
+      correctAnswer: "500",
+      explanation: "100 x 4 = 400, and 25 x 4 = 100. 400 + 100 = 500."
+    },
+    {
+      id: 339,
+      subject: "Science",
+      topic: "Life Science",
+      question: "What is the process by which a caterpillar turns into a butterfly called?",
+      options: ["Photosynthesis", "Metamorphosis", "Osmosis", "Respiration"],
+      correctAnswer: "Metamorphosis",
+      explanation: "Metamorphosis is the physical transformation an insect undergoes from immature to adult."
+    },
+    {
+      id: 340,
+      subject: "Language Arts",
+      topic: "Grammar",
+      question: "Which of these is a proper noun?",
+      options: ["city", "building", "Chicago", "street"],
+      correctAnswer: "Chicago",
+      explanation: "A proper noun is a specific name for a person, place, or thing, and it is always capitalized."
+    },
+    {
+      id: 341,
+      subject: "Social Studies",
+      topic: "US History",
+      question: "Who was the first President of the United States?",
+      options: ["Abraham Lincoln", "Thomas Jefferson", "George Washington", "John Adams"],
+      correctAnswer: "George Washington",
+      explanation: "George Washington served as the first President of the United States from 1789 to 1797."
+    },
+    {
+      id: 342,
+      subject: "Math",
+      topic: "Number Sense",
+      question: "What is 1,234 rounded to the nearest hundred?",
+      options: ["1,200", "1,230", "1,240", "1,300"],
+      correctAnswer: "1,200",
+      explanation: "The tens digit is 3, so the hundreds digit stays 2 and the number rounds to 1,200."
+    },
+    {
+      id: 343,
+      subject: "Math",
+      topic: "Measurement",
+      question: "How many minutes are in 3 hours and 15 minutes?",
+      options: ["155 minutes", "175 minutes", "180 minutes", "195 minutes"],
+      correctAnswer: "195 minutes",
+      explanation: "Three hours equal 180 minutes, plus 15 more minutes gives 195 minutes."
+    },
+    {
+      id: 344,
+      subject: "Science",
+      topic: "Earth Science",
+      question: "Which layer of Earth is directly below the crust?",
+      options: ["Mantle", "Outer core", "Inner core", "Atmosphere"],
+      correctAnswer: "Mantle",
+      explanation: "The mantle lies beneath the crust and above the outer core."
+    },
+    {
+      id: 345,
+      subject: "Science",
+      topic: "Physical Science",
+      question: "What simple machine is a seesaw an example of?",
+      options: ["Lever", "Pulley", "Wheel and axle", "Inclined plane"],
+      correctAnswer: "Lever",
+      explanation: "A seesaw pivots around a fulcrum, making it a type of lever."
+    },
+    {
+      id: 346,
+      subject: "Language Arts",
+      topic: "Reading",
+      question: "If a story says a path was winding and narrow, what can you infer about the path?",
+      options: ["It was wide and straight", "It was difficult to follow", "It was clear and easy", "It was lined with trees"],
+      correctAnswer: "It was difficult to follow",
+      explanation: "Winding and narrow suggest the path changed direction often and was not easy to walk."
+    },
+    {
+      id: 347,
+      subject: "Language Arts",
+      topic: "Vocabulary",
+      question: "Which word is a synonym for 'quiet'?",
+      options: ["Loud", "Silent", "Angry", "Heavy"],
+      correctAnswer: "Silent",
+      explanation: "Silent means very quiet or without sound."
+    },
+    {
+      id: 348,
+      subject: "Math",
+      topic: "Fractions",
+      question: "Which fraction is greater: 3/5 or 4/7?",
+      options: ["3/5", "4/7", "They are equal", "Cannot be compared"],
+      correctAnswer: "3/5",
+      explanation: "Convert to decimals or compare cross-products. 3/5 = 0.6 and 4/7 is about 0.57, so 3/5 is larger."
+    },
+    {
+      id: 349,
+      subject: "Math",
+      topic: "Decimals",
+      question: "What is 5.6 - 2.35?",
+      options: ["3.15", "3.25", "2.75", "3.35"],
+      correctAnswer: "3.25",
+      explanation: "Subtract 2.35 from 5.60 to get 3.25."
+    },
+    {
+      id: 350,
+      subject: "Social Studies",
+      topic: "Civics",
+      question: "What does it mean to be a good citizen?",
+      options: ["Follow rules, help others, and care about the community", "Only think about yourself", "Break laws to have fun", "Ignore others' needs"],
+      correctAnswer: "Follow rules, help others, and care about the community",
+      explanation: "Good citizens obey laws and show respect and care for their community and neighbors."
+    },
+    {
+      id: 351,
+      subject: "Science",
+      topic: "Life Science",
+      question: "Which part of a plant cell stores water and nutrients?",
+      options: ["Vacuole", "Nucleus", "Chloroplast", "Cell membrane"],
+      correctAnswer: "Vacuole",
+      explanation: "The vacuole stores water, nutrients, and other materials inside plant cells."
     }
   ];
 })();
