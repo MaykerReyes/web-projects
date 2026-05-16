@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather application</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-mode">
+    <div class="app-container">
+        <header>
+            <div class="search-container">
+                <input type="text" id="city-search" placeholder="Search for a city...">
+                <button id="search-btn" aria-label="Search">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </button>
+            </div>
+            <div class="theme-toggle">
+                <button id="theme-btn" aria-label="Toggle Theme">
+                    <svg id="moon-icon" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg id="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+            </div>
+        </header>
+
+        <main id="weather-content" class="hidden">
+            <section class="current-weather">
+                <div class="location-info">
+                    <h1 id="city-name">--</h1>
+                    <p id="current-date">--</p>
+                </div>
+                <div class="weather-main">
+                    <div class="weather-icon-large" id="current-icon">
+                        <!-- Icon will be injected here -->
+                    </div>
+                    <div class="temperature-container">
+                        <div class="temperature">
+                            <span id="current-temp">--</span>°F
+                        </div>
+                        <div class="condition">
+                            <p id="current-condition">--</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="weather-details">
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
+                        </div>
+                        <span class="detail-label">Wind</span>
+                        <span class="detail-value" id="current-wind">-- mph</span>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                        <span class="detail-label">Humidity</span>
+                        <span class="detail-value" id="current-humidity">--%</span>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                        </div>
+                        <span class="detail-label">Precipitation</span>
+                        <span class="detail-value" id="current-precip">--%</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="hourly-forecast">
+                <div class="section-header">
+                    <h2>Today</h2>
+                </div>
+                <div class="hourly-container" id="hourly-list">
+                    <!-- Hourly items injected via JS -->
+                </div>
+            </section>
+
+            <section class="multi-day-forecast">
+                <div class="section-header">
+                    <h2>3-Day Forecast</h2>
+                </div>
+                <div class="multi-day-container" id="daily-list">
+                    <!-- Daily items injected via JS -->
+                </div>
+            </section>
+        </main>
+        
+        <div id="loading-spinner" class="spinner-container">
+            <div class="spinner"></div>
+            <p>Fetching forecast...</p>
+        </div>
+        
+        <div id="error-message" class="error-container hidden">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            <p id="error-text">Location not found. Please try again.</p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

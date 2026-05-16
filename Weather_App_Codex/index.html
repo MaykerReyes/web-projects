@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather Blend</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="top-bar" aria-label="Weather search">
+      <div>
+        <p class="eyebrow">Three-source forecast</p>
+        <h1>Weather Blend</h1>
+      </div>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark mode" title="Toggle theme">
+        <span aria-hidden="true">☾</span>
+      </button>
+    </section>
+
+    <form class="search-panel" id="searchForm">
+      <label for="cityInput">City or ZIP code</label>
+      <div class="search-row">
+        <input id="cityInput" name="city" type="search" placeholder="Davenport, FL 33837" autocomplete="address-level2">
+        <button type="submit">Search</button>
+      </div>
+      <p class="hint">Default: Davenport, FL 33837</p>
+    </form>
+
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+
+    <section class="current-grid">
+      <article class="current-card">
+        <div>
+          <p class="label">Current weather</p>
+          <h2 id="placeName">Davenport, FL</h2>
+          <p id="updatedAt" class="muted">Loading forecast...</p>
+        </div>
+        <div class="current-main">
+          <span id="currentIcon" class="weather-icon" aria-hidden="true">◌</span>
+          <div>
+            <p id="currentTemp" class="temperature">--°F</p>
+            <p id="currentFeelsLike" class="feels-like">Feels like --°F</p>
+            <p id="currentCondition" class="condition">Gathering sources</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="metric-card">
+        <p class="label">Wind</p>
+        <strong id="currentWind">-- mph</strong>
+      </article>
+
+      <article class="metric-card">
+        <p class="label">Humidity</p>
+        <strong id="currentHumidity">--%</strong>
+      </article>
+
+      <article class="metric-card">
+        <p class="label">Precipitation</p>
+        <strong id="currentPrecip">--%</strong>
+      </article>
+    </section>
+
+    <section class="forecast-section" aria-labelledby="hourlyTitle">
+      <div class="section-heading">
+        <h2 id="hourlyTitle">Next 24 Hours</h2>
+        <p id="sourceSummary">Open-Meteo, MET Norway, and wttr.in</p>
+      </div>
+      <div class="hourly-strip" id="hourlyForecast"></div>
+    </section>
+
+    <section class="forecast-section" aria-labelledby="dailyTitle">
+      <div class="section-heading">
+        <h2 id="dailyTitle">Three-Day Forecast</h2>
+      </div>
+      <div class="daily-grid" id="dailyForecast"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

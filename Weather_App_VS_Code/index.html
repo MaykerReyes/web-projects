@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather App</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div>
+        <h1>Weather App</h1>
+        <p>Default location: Davenport, FL 33837</p>
+      </div>
+      <div class="controls">
+        <label class="search-label" for="city-input">Search city</label>
+        <div class="search-row">
+          <input id="city-input" type="text" placeholder="Enter city name" />
+          <button id="search-btn">Search</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="weather-card current-weather" id="current-weather">
+        <h2>Current Weather</h2>
+        <div class="weather-summary" id="current-summary">
+          <div>
+            <p class="weather-temp" id="current-temp">--°</p>
+            <p class="weather-desc" id="current-desc">Loading...</p>
+            <p class="weather-feels" id="current-feels">Feels like --°F</p>
+          </div>
+          <div class="weather-meta">
+            <p>Wind: <span id="current-wind">--</span></p>
+            <p>Humidity: <span id="current-humidity">--</span></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="weather-card hourly-forecast" id="hourly-forecast">
+        <h2>24-Hour Forecast</h2>
+        <div class="forecast-grid" id="hourly-grid"></div>
+      </section>
+
+      <section class="weather-card daily-forecast" id="daily-forecast">
+        <h2>3-Day Forecast</h2>
+        <div class="forecast-grid" id="daily-grid"></div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>Built with Open-Meteo, OpenWeatherMap, and WeatherAPI.</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
