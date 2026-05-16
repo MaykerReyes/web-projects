@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div>
+        <h1>Weather App</h1>
+        <p class="subtitle">Consensus weather from multiple free APIs</p>
+      </div>
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle light or dark mode">
+        Toggle Theme
+      </button>
+    </header>
+
+    <form id="searchForm" class="search-form" autocomplete="off">
+      <label for="cityInput" class="sr-only">Search city</label>
+      <input
+        id="cityInput"
+        name="city"
+        type="text"
+        placeholder="Search city (e.g., Orlando, FL)"
+        required
+      />
+      <button type="submit">Search</button>
+    </form>
+
+    <p id="statusMessage" class="status-message" role="status" aria-live="polite"></p>
+
+    <main class="weather-grid">
+      <section class="card current-weather" aria-labelledby="currentWeatherTitle">
+        <h2 id="currentWeatherTitle">Current Weather</h2>
+        <div id="currentWeatherContent" class="current-content"></div>
+      </section>
+
+      <section class="card hourly-weather" aria-labelledby="hourlyWeatherTitle">
+        <h2 id="hourlyWeatherTitle">Next 24 Hours</h2>
+        <div id="hourlyForecast" class="hourly-scroll"></div>
+      </section>
+
+      <section class="card daily-weather" aria-labelledby="dailyWeatherTitle">
+        <h2 id="dailyWeatherTitle">Three-Day Forecast</h2>
+        <div id="dailyForecast" class="daily-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
