@@ -1,0 +1,12 @@
+{
+  "name": "video-downloader",
+  "version": "1.0.0",
+  "description": "Download videos from YouTube, Facebook, and Instagram",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
